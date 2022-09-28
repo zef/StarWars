@@ -13,7 +13,11 @@ struct ContentView: View {
             Image(systemName: "globe")
                 .imageScale(.large)
                 .foregroundColor(.accentColor)
-            Text("Hello, \(Person.luke.name)!")
+            if let luke = Person.luke {
+                Text("Hello, \(luke.name)!")
+            } else {
+                Text("No person found.")
+            }
         }
         .padding()
     }
