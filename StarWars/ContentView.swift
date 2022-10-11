@@ -20,6 +20,11 @@ struct ContentView: View {
             }
         }
         .padding()
+        .onAppear() {
+            API.fetchPeople { result in
+                print("Done fetching")
+            }
+        }
     }
 }
 

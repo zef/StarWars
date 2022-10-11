@@ -13,9 +13,8 @@ struct Person: Codable {
 //    var mass: Int?
 
     static var luke: Person? {
-        Person.fromJSON(named: "luke")
+        Person.fromJSONFile(named: "luke")
     }
-    
 
     static func fromJSON(data: Data) -> Person? {
         let decoder = JSONDecoder()
@@ -24,6 +23,7 @@ struct Person: Codable {
             return luke
         } catch {
             print("Could not make person from data.", error.localizedDescription)
+            return nil
         }
     }
 
