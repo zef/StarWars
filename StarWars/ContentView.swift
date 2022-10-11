@@ -22,7 +22,12 @@ struct ContentView: View {
         .padding()
         .onAppear() {
             API.fetchPeople { result in
-                print("Done fetching")
+                switch result {
+                case .success(let people):
+                    print("Got people:", people)
+                case .failure(let error):
+                    print("Fetching people failed.", error)
+                }
             }
         }
     }

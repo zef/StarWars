@@ -12,6 +12,7 @@ class API {
         case fetchError
         case decodingError
         case notImplemented
+        case unknownError
     }
 
     enum Environment: String {
@@ -46,7 +47,7 @@ class API {
         return url
     }
 
-    static func fetchPeople(completion: (Result<[Person], APIError>) -> Void) {
+    static func fetchPeople(completion: @escaping (Result<[Person], APIError>) -> Void) {
         fetchJSON(path: .people) { result in
             switch result {
             case .success(let data):
@@ -67,10 +68,23 @@ class API {
         }
     }
 
-    static func fetchJSON(path: Path, completion: (Result<Data, APIError>) -> Void) {
-        print("Path URL: \(path.url)")
-        // make the request
-        completion(.failure(.notImplemented))
+    static func fetchJSON(path: Path, completion: @escaping (Result<Data, APIError>) -> Void) {
+        let session = URLSession.shared
+        let request = URLRequest(url: path.url)
+        let task = session.dataTask(with: request) { data, response, error in
+            guard let data = data else {
+                if let error = error {
+                    print("Error occurred when fetching json.", error)
+                    completion(.failure(.fetchError))
+                } else {
+                    completion(.failure(.unknownError))
+                }
+                return
+            }
+
+            completion(.success(data))
+        }
+        task.resume()
     }
 }
 
