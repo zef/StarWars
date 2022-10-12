@@ -52,7 +52,8 @@ class API {
             case .success(let data):
                 do {
                     if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
-                       let resultData = try? JSONSerialization.data(withJSONObject: json["results"]) {
+                       let resultDictionary = json["results"] as? [String: Any],
+                       let resultData = try? JSONSerialization.data(withJSONObject: resultDictionary) {
                         let people = try Person.decodeJSONCollection(from: resultData)
                         completion(.success(people))
                     }
