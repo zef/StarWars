@@ -9,8 +9,8 @@ import Foundation
 
 class API {
     enum APIError: Error {
-        case fetchError
         case decodingError
+        case networkError(Error)
         case notImplemented
         case unknownError
     }
@@ -63,7 +63,7 @@ class API {
             case .failure(let error):
                 // Handle HTTP failure:
                 print("Error occurred when fetching people.", error)
-                completion(.failure(.fetchError))
+                completion(.failure(.networkError(error)))
             }
         }
     }
@@ -75,8 +75,9 @@ class API {
             guard let data = data else {
                 if let error = error {
                     print("Error occurred when fetching json.", error)
-                    completion(.failure(.fetchError))
+                    completion(.failure(.networkError(error)))
                 } else {
+                    assertionFailure("Unexpected codepath.")
                     completion(.failure(.unknownError))
                 }
                 return
