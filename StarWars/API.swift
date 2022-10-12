@@ -71,6 +71,7 @@ class API {
     static func fetchJSON(path: Path, completion: @escaping (Result<Data, APIError>) -> Void) {
         let session = URLSession.shared
         let request = URLRequest(url: path.url)
+        // add headers to request here, if needed
         let task = session.dataTask(with: request) { data, response, error in
             guard let data = data else {
                 if let error = error {
@@ -82,7 +83,6 @@ class API {
                 }
                 return
             }
-
             completion(.success(data))
         }
         task.resume()
