@@ -11,7 +11,6 @@ class API {
     enum APIError: Error {
         case decodingError
         case networkError(Error)
-        case notImplemented
         case unknownError
     }
 
@@ -51,10 +50,12 @@ class API {
         fetchJSON(path: .people) { result in
             switch result {
             case .success(let data):
-                // Decoding collection:
                 do {
-                    let people = try Person.decodeJSONCollection(from: data)
-                    completion(.success(people))
+                    if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+                       let resultData = try? JSONSerialization.data(withJSONObject: json["results"]) {
+                        let people = try Person.decodeJSONCollection(from: resultData)
+                        completion(.success(people))
+                    }
                 } catch let error {
                     print("Could not decode collection.", error)
                     completion(.failure(.decodingError))
