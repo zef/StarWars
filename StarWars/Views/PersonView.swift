@@ -7,21 +7,31 @@
 
 import SwiftUI
 
+extension PersonView {
+    @MainActor class ViewModel: ObservableObject {
+        @Published var person: Person
+
+        init(person: Person) {
+            self.person = person
+        }
+    }
+}
+
 struct PersonView: View {
-    @State var person: Person
+    var viewModel: ViewModel
 
     var body: some View {
         List {
-            if let height = person.height {
+            if let height = viewModel.person.height {
                 metadataRow(label: "Height:", value: "\(height)")
             }
-            if let mass = person.mass {
+            if let mass = viewModel.person.mass {
                 metadataRow(label: "Mass:", value: "\(mass)")
             }
-            metadataRow(label: "Height to Weight:", value: String(heightToWeight(person: person)))
-            metadataRow(label: "Hair Color:", value: person.hairColor)
+            metadataRow(label: "Height to Weight:", value: String(heightToWeight(person: viewModel.person)))
+            metadataRow(label: "Hair Color:", value: viewModel.person.hairColor)
         }
-        .navigationTitle(person.name)
+        .navigationTitle(viewModel.person.name)
     }
 
     func metadataRow(label: String, value: String) -> some View {
@@ -41,7 +51,7 @@ struct PersonView: View {
 struct PersonView_Previews: PreviewProvider {
     static var previews: some View {
         if let person = Person.luke {
-            PersonView(person: person)
+            PersonView(viewModel: PersonView.ViewModel(person: person))
         }
     }
 }

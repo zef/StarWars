@@ -28,7 +28,7 @@ struct PeopleView: View {
             NavigationView {
                 List(people) { person in
                     NavigationLink {
-                        PersonView(person: person)
+                        PersonView(viewModel: PersonView.ViewModel(person: person))
                     } label: {
                         Text(person.name)
                     }
