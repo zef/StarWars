@@ -18,6 +18,7 @@ struct PersonView: View {
             if let mass = person.mass {
                 metadataRow(label: "Mass:", value: "\(mass)")
             }
+            metadataRow(label: "Height to Weight:", value: String(heightToWeight(person: person)))
             metadataRow(label: "Hair Color:", value: person.hairColor)
         }
         .navigationTitle(person.name)
@@ -29,6 +30,11 @@ struct PersonView: View {
         } header: {
             Text(label)
         }
+    }
+
+    func heightToWeight(person: Person) -> Float {
+        guard let height = person.height, let mass = person.mass else { return 0 }
+        return Float(height) / Float(mass)
     }
 }
 
