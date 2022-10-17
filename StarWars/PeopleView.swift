@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  PeopleView.swift
 //  StarWars
 //
 //  Created by Zef Houssney on 9/28/22.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct PeopleView: View {
 
     @State var people = [Person]()
 
@@ -33,8 +33,8 @@ struct ContentView: View {
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
+struct PeopleView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        PeopleView()
     }
 }
