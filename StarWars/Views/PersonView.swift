@@ -13,25 +13,22 @@ struct PersonView: View {
     var body: some View {
         List {
             if let height = person.height {
-                Section {
-                    Text("\(height)")
-                } header: {
-                    Text("Height:")
-                }
+                metadataRow(label: "Height:", value: "\(height)")
             }
             if let mass = person.mass {
-                Section {
-                    Text("\(mass)")
-                } header: {
-                    Text("Mass:")
-                }
+                metadataRow(label: "Mass:", value: "\(mass)")
             }
-            Section {
-                Text(person.hairColor)
-            } header: {
-                Text("Hair Color:")
-            }
-        }.navigationTitle(person.name)
+            metadataRow(label: "Hair Color:", value: person.hairColor)
+        }
+        .navigationTitle(person.name)
+    }
+
+    func metadataRow(label: String, value: String) -> some View {
+        Section {
+            Text(value)
+        } header: {
+            Text(label)
+        }
     }
 }
 
