@@ -25,10 +25,16 @@ struct PeopleView: View {
                 }
             }
         } else {
-            List(people) { person in
-                Text(person.name)
+            NavigationView {
+                List(people) { person in
+                    NavigationLink {
+                        PersonView(person: person)
+                    } label: {
+                        Text(person.name)
+                    }
+                }
+                .navigationTitle("People")
             }
-
         }
     }
 }
