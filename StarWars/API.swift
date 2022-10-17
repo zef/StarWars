@@ -92,11 +92,17 @@ class API {
 }
 
 extension Decodable {
+    static var decoder: JSONDecoder {
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        return decoder
+    }
+
     static func decodeJSON(from data: Data) throws -> Self {
-        return try JSONDecoder().decode(Self.self, from: data)
+        return try decoder.decode(Self.self, from: data)
     }
 
     static func decodeJSONCollection(from data: Data) throws -> [Self] {
-        return try JSONDecoder().decode([Self].self, from: data)
+        return try decoder.decode([Self].self, from: data)
     }
 }
