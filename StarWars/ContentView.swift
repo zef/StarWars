@@ -8,27 +8,27 @@
 import SwiftUI
 
 struct ContentView: View {
+
+    @State var people = [Person]()
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            if let luke = Person.luke {
-                Text("Hello, \(luke.name)!")
-            } else {
-                Text("No person found.")
-            }
-        }
-        .padding()
-        .onAppear() {
-            API.fetchPeople { result in
-                switch result {
-                case .success(let people):
-                    print("Got people:", people)
-                case .failure(let error):
-                    print("Fetching people failed.", error)
+        if people.isEmpty {
+            Text("loading people...")
+            .onAppear() {
+                API.fetchPeople { result in
+                    switch result {
+                    case .success(let people):
+                        self.people = people
+                    case .failure(let error):
+                        print("Fetching people failed.", error)
+                    }
                 }
             }
+        } else {
+            List(people) { person in
+                Text(person.name)
+            }
+
         }
     }
 }
