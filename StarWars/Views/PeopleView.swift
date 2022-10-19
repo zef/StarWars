@@ -24,7 +24,7 @@ struct PeopleView: View {
         }
         .overlay {
             if people.isEmpty {
-                Text("loading people...")
+                Text("Loading people...")
             }
         }
         .onAppear() {
@@ -33,6 +33,7 @@ struct PeopleView: View {
                 case .success(let people):
                     self.people = people
                 case .failure(let error):
+                    // TODO: Handle this error properly
                     print("Fetching people failed.", error)
                 }
             }
