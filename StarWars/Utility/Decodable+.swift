@@ -21,4 +21,11 @@ extension Decodable {
     static func decodeJSONCollection(from data: Data) throws -> [Self] {
         return try decoder.decode([Self].self, from: data)
     }
+
+    static func fromJSONFile(named name: String) -> Self? {
+        if let data = Data.fromJSONFile(forName: name) {
+            return try? Self.decodeJSON(from: data)
+        }
+        return nil
+    }
 }
