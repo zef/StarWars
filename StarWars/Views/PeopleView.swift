@@ -12,28 +12,29 @@ struct PeopleView: View {
     @State var people = [Person]()
 
     var body: some View {
-        if people.isEmpty {
-            Text("loading people...")
-            .onAppear() {
-                API.fetchPeople { result in
-                    switch result {
-                    case .success(let people):
-                        self.people = people
-                    case .failure(let error):
-                        print("Fetching people failed.", error)
-                    }
+        NavigationView {
+            List(people) { person in
+                NavigationLink {
+                    PersonView(viewModel: PersonView.ViewModel(person: person))
+                } label: {
+                    Text(person.name)
                 }
             }
-        } else {
-            NavigationView {
-                List(people) { person in
-                    NavigationLink {
-                        PersonView(viewModel: PersonView.ViewModel(person: person))
-                    } label: {
-                        Text(person.name)
-                    }
+            .navigationTitle("People")
+        }
+        .overlay {
+            if people.isEmpty {
+                Text("loading people...")
+            }
+        }
+        .onAppear() {
+            API.fetchPeople { result in
+                switch result {
+                case .success(let people):
+                    self.people = people
+                case .failure(let error):
+                    print("Fetching people failed.", error)
                 }
-                .navigationTitle("People")
             }
         }
     }
