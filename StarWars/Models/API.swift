@@ -28,6 +28,18 @@ class API {
     enum Environment: String {
         case staging
         case production = "www"
+
+        var subdomain: String {
+            rawValue
+        }
+
+        static var current: Self {
+            if StarWarsApp.isDebug {
+                return .staging
+            } else {
+                return .production
+            }
+        }
     }
 
     enum Path: String {
@@ -38,10 +50,6 @@ class API {
         var url: URL {
             API.url.appending(component: self.rawValue)
         }
-    }
-
-    static var environment: Environment {
-        return .staging
     }
 
     static var apiKey: String {
@@ -58,6 +66,12 @@ class API {
     }
 
     static func fetchPeople(completion: @escaping (Result<[Person], APIError>) -> Void) {
+        guard !StarWarsApp.failAPICalls else {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                completion(.failure(.decodingError))
+            }
+            return
+        }
         fetchJSON(path: .people) { result in
             switch result {
             case .success(let data):
