@@ -12,6 +12,17 @@ class API {
         case decodingError
         case networkError(Error)
         case unknownError
+
+        var message: String {
+            switch self {
+            case .decodingError:
+                return "Data could not be decoded."
+            case .networkError(_):
+                return "There was a network problem."
+            case .unknownError:
+                return "Something went wrong."
+            }
+        }
     }
 
     enum Environment: String {

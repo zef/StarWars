@@ -10,6 +10,8 @@ import SwiftUI
 struct PeopleView: View {
 
     @State var people = [Person]()
+    @State var showAlert = false
+    @State var errorMessage: String?
 
     var body: some View {
         NavigationView {
@@ -21,6 +23,14 @@ struct PeopleView: View {
                 }
             }
             .navigationTitle("People")
+            .alert("This is bad", isPresented: $showAlert, actions: {
+                Button("Try Again", role: .none) {
+                    fetchPeople()
+                }
+                Button("OK", role: .none) {}
+            }, message: {
+                Text(errorMessage ?? "Not Set")
+            })
         }
         .overlay {
             if people.isEmpty {
@@ -28,14 +38,18 @@ struct PeopleView: View {
             }
         }
         .onAppear() {
-            API.fetchPeople { result in
-                switch result {
-                case .success(let people):
-                    self.people = people
-                case .failure(let error):
-                    // TODO: Handle this error properly
-                    print("Fetching people failed.", error)
-                }
+            fetchPeople()
+        }
+    }
+
+    func fetchPeople() {
+        API.fetchPeople { result in
+            switch result {
+            case .success(let people):
+                self.people = people
+            case .failure(let error):
+                errorMessage = error.message
+                showAlert = true
             }
         }
     }
