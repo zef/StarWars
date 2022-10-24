@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Alamofire
 
 class API {
     enum APIError: Error {
@@ -96,22 +97,13 @@ class API {
     }
 
     static func fetchJSON(path: Path, completion: @escaping (Result<Data, APIError>) -> Void) {
-        let session = URLSession.shared
-        let request = URLRequest(url: path.url)
-        // add headers to request here, if needed
-        let task = session.dataTask(with: request) { data, response, error in
-            guard let data = data else {
-                if let error = error {
-                    print("Error occurred when fetching json.", error)
-                    completion(.failure(.networkError(error)))
-                } else {
-                    assertionFailure("Unexpected codepath.")
-                    completion(.failure(.unknownError))
-                }
-                return
+        AF.request(path.url).responseData { response in
+            switch response.result {
+            case .success(let data):
+                completion(.success(data))
+            case .failure(let error):
+                completion(.failure(.networkError(error)))
             }
-            completion(.success(data))
         }
-        task.resume()
     }
 }
