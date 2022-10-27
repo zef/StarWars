@@ -21,6 +21,7 @@
 		8DAACC9928E4D8CA003DF731 /* StarWarsUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DAACC9828E4D8CA003DF731 /* StarWarsUITestsLaunchTests.swift */; };
 		8DAACCA728E4D982003DF731 /* luke.json in Resources */ = {isa = PBXBuildFile; fileRef = 8DAACCA528E4D954003DF731 /* luke.json */; };
 		8DAACCA928E4D9C2003DF731 /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DAACCA828E4D9C2003DF731 /* Person.swift */; };
+		8DB8144A290B2C7C00088317 /* Retry in Frameworks */ = {isa = PBXBuildFile; productRef = 8DB81449290B2C7C00088317 /* Retry */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +66,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D4A1824290720950033C2B1 /* Alamofire in Frameworks */,
+				8DB8144A290B2C7C00088317 /* Retry in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +114,13 @@
 			path = Utility;
 			sourceTree = "<group>";
 		};
+		8D966DB129079A9D000EC846 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		8DAACC6F28E4D8C8003DF731 = {
 			isa = PBXGroup;
 			children = (
@@ -119,6 +128,7 @@
 				8DAACC8B28E4D8CA003DF731 /* StarWarsTests */,
 				8DAACC9528E4D8CA003DF731 /* StarWarsUITests */,
 				8DAACC7928E4D8C8003DF731 /* Products */,
+				8D966DB129079A9D000EC846 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -189,6 +199,7 @@
 			name = StarWars;
 			packageProductDependencies = (
 				8D4A1823290720950033C2B1 /* Alamofire */,
+				8DB81449290B2C7C00088317 /* Retry */,
 			);
 			productName = StarWars;
 			productReference = 8DAACC7828E4D8C8003DF731 /* StarWars.app */;
@@ -264,6 +275,7 @@
 			mainGroup = 8DAACC6F28E4D8C8003DF731;
 			packageReferences = (
 				8D4A1822290720940033C2B1 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				8DB81448290B2C7C00088317 /* XCRemoteSwiftPackageReference "Retry" */,
 			);
 			productRefGroup = 8DAACC7928E4D8C8003DF731 /* Products */;
 			projectDirPath = "";
@@ -649,6 +661,14 @@
 				minimumVersion = 5.0.0;
 			};
 		};
+		8DB81448290B2C7C00088317 /* XCRemoteSwiftPackageReference "Retry" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/zef/Retry";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -656,6 +676,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 8D4A1822290720940033C2B1 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
+		};
+		8DB81449290B2C7C00088317 /* Retry */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8DB81448290B2C7C00088317 /* XCRemoteSwiftPackageReference "Retry" */;
+			productName = Retry;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

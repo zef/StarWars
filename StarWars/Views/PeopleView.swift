@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Retry
 
 struct PeopleView: View {
 
@@ -43,13 +44,19 @@ struct PeopleView: View {
     }
 
     func fetchPeople() {
-        API.fetchPeople { result in
-            switch result {
-            case .success(let people):
-                self.people = people
-            case .failure(let error):
-                errorMessage = error.message
-                showAlert = true
+        Retry.attempt("Fetch People") { attempt in
+            API.fetchPeople { result in
+                switch result {
+                case .success(let people):
+                    self.people = people
+                    attempt.success()
+                case .failure(let error):
+                    print("Failed, might retry.")
+                    attempt.failure {
+                        errorMessage = error.message
+                        showAlert = true
+                    }
+                }
             }
         }
     }
