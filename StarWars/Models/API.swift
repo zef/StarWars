@@ -6,17 +6,41 @@
 //
 
 import Foundation
+import Alamofire
 
 class API {
     enum APIError: Error {
         case decodingError
         case networkError(Error)
         case unknownError
+
+        var message: String {
+            switch self {
+            case .decodingError:
+                return "Data could not be decoded."
+            case .networkError(_):
+                return "There was a network problem."
+            case .unknownError:
+                return "Something went wrong."
+            }
+        }
     }
 
     enum Environment: String {
         case staging
         case production = "www"
+
+        var subdomain: String {
+            rawValue
+        }
+
+        static var current: Self {
+            if StarWarsApp.isDebug {
+                return .staging
+            } else {
+                return .production
+            }
+        }
     }
 
     enum Path: String {
@@ -27,10 +51,6 @@ class API {
         var url: URL {
             API.url.appending(component: self.rawValue)
         }
-    }
-
-    static var environment: Environment {
-        return .staging
     }
 
     static var apiKey: String {
@@ -47,6 +67,12 @@ class API {
     }
 
     static func fetchPeople(completion: @escaping (Result<[Person], APIError>) -> Void) {
+        guard !StarWarsApp.failAPICalls else {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                completion(.failure(.decodingError))
+            }
+            return
+        }
         fetchJSON(path: .people) { result in
             switch result {
             case .success(let data):
@@ -71,38 +97,13 @@ class API {
     }
 
     static func fetchJSON(path: Path, completion: @escaping (Result<Data, APIError>) -> Void) {
-        let session = URLSession.shared
-        let request = URLRequest(url: path.url)
-        // add headers to request here, if needed
-        let task = session.dataTask(with: request) { data, response, error in
-            guard let data = data else {
-                if let error = error {
-                    print("Error occurred when fetching json.", error)
-                    completion(.failure(.networkError(error)))
-                } else {
-                    assertionFailure("Unexpected codepath.")
-                    completion(.failure(.unknownError))
-                }
-                return
+        AF.request(path.url).responseData { response in
+            switch response.result {
+            case .success(let data):
+                completion(.success(data))
+            case .failure(let error):
+                completion(.failure(.networkError(error)))
             }
-            completion(.success(data))
         }
-        task.resume()
-    }
-}
-
-extension Decodable {
-    static var decoder: JSONDecoder {
-        let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
-        return decoder
-    }
-
-    static func decodeJSON(from data: Data) throws -> Self {
-        return try decoder.decode(Self.self, from: data)
-    }
-
-    static func decodeJSONCollection(from data: Data) throws -> [Self] {
-        return try decoder.decode([Self].self, from: data)
     }
 }

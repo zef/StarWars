@@ -14,4 +14,22 @@ struct StarWarsApp: App {
             PeopleView()
         }
     }
+
+    static var isDebug: Bool {
+        #if DEBUG
+            return true
+        #else
+            return false
+        #endif
+    }
+
+    static var chaosMonkeyEnabled: Bool {
+        return isDebug && true
+    }
+
+    // Failing 10% of api calls in Development mode, if enabled
+    static var failAPICalls: Bool {
+        guard chaosMonkeyEnabled else { return false }
+        return Int.random(in: 0..<100) > 90
+    }
 }

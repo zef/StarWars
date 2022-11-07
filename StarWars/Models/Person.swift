@@ -29,13 +29,6 @@ struct Person: Codable {
     static var luke: Person? {
         Person.fromJSONFile(named: "luke")
     }
-
-    static func fromJSONFile(named name: String) -> Person? {
-        if let data = Data.fromJSONFile(forName: name) {
-            return try? Person.decodeJSON(from: data)
-        }
-        return nil
-    }
 }
 
 extension Person: Identifiable {
