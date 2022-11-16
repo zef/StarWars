@@ -15,7 +15,7 @@ struct PeopleView: View {
     @State var errorMessage: String?
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List(people) { person in
                 NavigationLink {
                     PersonView(viewModel: PersonView.ViewModel(person: person))
